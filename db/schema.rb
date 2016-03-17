@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140916000000) do
+ActiveRecord::Schema.define(version: 20160316064841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,6 +81,14 @@ ActiveRecord::Schema.define(version: 20140916000000) do
   add_index "pages", ["path"], name: "index_pages_on_path", using: :btree
   add_index "pages", ["prior"], name: "index_pages_on_prior", using: :btree
 
+  create_table "products", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "slug"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string   "ident",                      null: false
     t.string   "name"
@@ -110,6 +118,13 @@ ActiveRecord::Schema.define(version: 20140916000000) do
   end
 
   add_index "static_files", ["holder_type", "holder_id"], name: "index_static_files_on_holder_type_and_holder_id", using: :btree
+
+  create_table "variants", force: :cascade do |t|
+    t.string   "sku"
+    t.string   "width"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   add_foreign_key "nav_items", "pages", column: "url_page_id", on_delete: :cascade
 end

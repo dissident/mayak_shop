@@ -1,0 +1,4 @@
+rails g mayak:model_only product name description:text slug variants:has_many
+rails g mayak:model_only variant sku is_master:boolean product:belons_to width
+
+rails g mayak:admin_only product name description:text slug variants:has_many
