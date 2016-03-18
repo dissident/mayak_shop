@@ -2,3 +2,9 @@ rails g mayak:model_only product name description:text slug variants:has_many
 rails g mayak:model_only variant sku is_master:boolean product:belons_to width
 
 rails g mayak:admin_only product name description:text slug variants:has_many
+
+rails g mayak:model_only variant_option name option_values:has_many
+rails g mayak:model_only variant_option_value value variant_option:belongs_to
+rails g mayak:m2m variant variant_option_value
+
+rails g mayak:admin_only variant_option name option_values:has_many

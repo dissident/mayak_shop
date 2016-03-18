@@ -1,8 +1,8 @@
 GIT
   remote: git@github.com:dissident/mayak_generator.git
-  revision: 03c313b11309fa43a968bbb1c88703a530c0c90c
+  revision: cba20dfe08a93e7336bf2a220cc1a02cb4b4b53f
   specs:
-    mayak_generator (0.0.1)
+    mayak_generator (0.0.3)
       rails (>= 4.2.3)
 
 GEM
@@ -177,7 +177,7 @@ GEM
       activesupport (= 4.2.5.1)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.5.0)
+    rake (11.1.1)
     ransack (1.7.0)
       actionpack (>= 3.0)
       activerecord (>= 3.0)

@@ -66,6 +66,16 @@ ru:
         few:    "Новости"
         many:   "Новостей"
         other:  "Новости"
+      variant_option:
+        one:    "Опция варианта"
+        few:    "Опций варианта"
+        many:   "Опций варианта"
+        other:  "Опции варианта"
+      variant_option_value:
+        one:    "Значение опции варианта"
+        few:    "Значений опции варианта"
+        many:   "Значений опции варианта"
+        other:  "Значения опции варианта"
     attributes:
       admin_user:
         email:                  "Электронная почта"
@@ -118,3 +128,7 @@ ru:
         hided:        "Скрыта?"
         created_at:   "Создана"
         updated_at:   "Обновлена"
+      variant_option:
+        name: "Название"
+      variant_option_value:
+        value: "Значение"

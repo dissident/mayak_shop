@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316064841) do
+ActiveRecord::Schema.define(version: 20160318051255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,29 @@ ActiveRecord::Schema.define(version: 20160316064841) do
 
   add_index "static_files", ["holder_type", "holder_id"], name: "index_static_files_on_holder_type_and_holder_id", using: :btree
 
+  create_table "variant_option_values", force: :cascade do |t|
+    t.string   "value"
+    t.integer  "variant_option_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "variant_option_values", ["variant_option_id"], name: "index_variant_option_values_on_variant_option_id", using: :btree
+
+  create_table "variant_option_values_variants", id: false, force: :cascade do |t|
+    t.integer "variant_id"
+    t.integer "variant_option_value_id"
+  end
+
+  add_index "variant_option_values_variants", ["variant_id"], name: "index_variant_option_values_variants_on_variant_id", using: :btree
+  add_index "variant_option_values_variants", ["variant_option_value_id"], name: "index_variant_option_values_variants_on_variant_option_value_id", using: :btree
+
+  create_table "variant_options", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "variants", force: :cascade do |t|
     t.string   "sku"
     t.string   "width"
@@ -127,4 +150,5 @@ ActiveRecord::Schema.define(version: 20160316064841) do
   end
 
   add_foreign_key "nav_items", "pages", column: "url_page_id", on_delete: :cascade
+  add_foreign_key "variant_option_values", "variant_options"
 end

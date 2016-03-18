@@ -30,9 +30,7 @@ ActiveAdmin.register Product do
   form html: { multipart: true } do |f|
     f.inputs '' do
       f.input :name
-      f.input :description, input_html: { class: 'editor',
-          'data-type' => f.object.class.name,
-          'data-id' => f.object.id }
+      f.input :description, input_html: { class: 'editor', 'data-type' => f.object.class.name, 'data-id' => f.object.id }
       f.input :slug
     end
 
