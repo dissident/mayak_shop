@@ -76,6 +76,16 @@ ru:
         few:    "Значений опции варианта"
         many:   "Значений опции варианта"
         other:  "Значения опции варианта"
+      product_property:
+        one:    "Параметр продукта"
+        few:    "Параметров продукта"
+        many:   "Параметров продукта"
+        other:  "Параметры продукта"
+      product_property_value:
+        one:    "Значение параметра продукта"
+        few:    "Значений параметра продукта"
+        many:   "Значений параметра продукта"
+        other:  "Значения параметра продукта"
     attributes:
       admin_user:
         email:                  "Электронная почта"
@@ -131,4 +141,8 @@ ru:
       variant_option:
         name: "Название"
       variant_option_value:
+        value: "Значение"
+      product_property:
+        name: "Название"
+      product_property_value:
         value: "Значение"

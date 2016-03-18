@@ -1,0 +1,11 @@
+class ProductProperty < ActiveRecord::Base
+
+  has_many :product_property_values, inverse_of: :product_property
+
+  accepts_nested_attributes_for :product_property_values, allow_destroy: true
+
+  validates :name, presence: true
+  validates_associated :product_property_values
+
+
+end

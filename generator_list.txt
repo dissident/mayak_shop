@@ -8,3 +8,9 @@ rails g mayak:model_only variant_option_value value variant_option:belongs_to
 rails g mayak:m2m variant variant_option_value
 
 rails g mayak:admin_only variant_option name option_values:has_many
+
+rails d mayak:model_only product_property name product_property_values:has_many
+rails g mayak:model_only product_property_value value product_property:belongs_to
+rails g mayak:m2m product product_property_value
+
+rails g mayak:admin_only product_property name product_property_value:has_many
