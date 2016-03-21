@@ -39,8 +39,6 @@ ActiveAdmin.register VariantOption do
 
     end
 
-    
-
     f.actions
   end
 end

@@ -14,3 +14,10 @@ rails g mayak:model_only product_property_value value product_property:belongs_t
 rails g mayak:m2m product product_property_value
 
 rails g mayak:admin_only product_property name product_property_value:has_many
+
+rails g mayak:model_only prototype name product_properties:has_many variant_options:has_many
+
+rails g mayak:m2m prototype product_property
+rails g mayak:m2m prototype variant_option
+
+rails g mayak:admin_only prototype name product_properties:has_many variant_options:has_many

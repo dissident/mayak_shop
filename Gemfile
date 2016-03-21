@@ -102,4 +102,8 @@ group :development do
   gem 'spring'
 
   gem 'mayak_generator', git: 'git@github.com:dissident/mayak_generator.git'
+
 end
+
+gem 'select2-rails'
+gem 'activeadmin-select2', github: 'mfairburn/activeadmin-select2'

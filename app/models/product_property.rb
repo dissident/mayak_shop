@@ -1,5 +1,7 @@
 class ProductProperty < ActiveRecord::Base
 
+  has_and_belongs_to_many :prototypes
+
   has_many :product_property_values, inverse_of: :product_property
 
   accepts_nested_attributes_for :product_property_values, allow_destroy: true

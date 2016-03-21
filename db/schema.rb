@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160318092402) do
+ActiveRecord::Schema.define(version: 20160321035717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,14 @@ ActiveRecord::Schema.define(version: 20160318092402) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "product_properties_prototypes", id: false, force: :cascade do |t|
+    t.integer "product_property_id"
+    t.integer "prototype_id"
+  end
+
+  add_index "product_properties_prototypes", ["product_property_id"], name: "index_product_properties_prototypes_on_product_property_id", using: :btree
+  add_index "product_properties_prototypes", ["prototype_id"], name: "index_product_properties_prototypes_on_prototype_id", using: :btree
+
   create_table "product_property_values", force: :cascade do |t|
     t.string   "value"
     t.integer  "product_property_id"
@@ -111,6 +119,20 @@ ActiveRecord::Schema.define(version: 20160318092402) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "prototypes", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "prototypes_variant_options", id: false, force: :cascade do |t|
+    t.integer "prototype_id"
+    t.integer "variant_option_id"
+  end
+
+  add_index "prototypes_variant_options", ["prototype_id"], name: "index_prototypes_variant_options_on_prototype_id", using: :btree
+  add_index "prototypes_variant_options", ["variant_option_id"], name: "index_prototypes_variant_options_on_variant_option_id", using: :btree
 
   create_table "settings", force: :cascade do |t|
     t.string   "ident",                      null: false

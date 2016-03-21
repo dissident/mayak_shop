@@ -86,6 +86,11 @@ ru:
         few:    "Значений параметра продукта"
         many:   "Значений параметра продукта"
         other:  "Значения параметра продукта"
+      prototype:
+        one:    "Прототип"
+        few:    "Прототипов"
+        many:   "Прототипов"
+        other:  "Прототипы"
     attributes:
       admin_user:
         email:                  "Электронная почта"
@@ -146,3 +151,7 @@ ru:
         name: "Название"
       product_property_value:
         value: "Значение"
+      prototype:
+        name: "Название"
+        product_properties: "Параметры продукты"
+        variant_options: "Опции варианта"
