@@ -2,6 +2,8 @@ ActiveAdmin.register ProductProperty do
 
   permit_params :name, product_property_values_attributes:[ :id, :value, :_destroy]
 
+  menu parent: "Товары"
+
   ## INDEX
 
   index download_links: false do

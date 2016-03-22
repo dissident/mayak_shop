@@ -2,6 +2,8 @@ ActiveAdmin.register Prototype do
 
   permit_params :name, product_property_ids:[], variant_option_ids:[]
 
+  menu parent: "Товары"
+
   ## INDEX
 
   index download_links: false do

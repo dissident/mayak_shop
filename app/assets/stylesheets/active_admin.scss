@@ -45,5 +45,12 @@
 
 .select2-container {
   width: 80% !important;
+}
 
+.hidden { display: none }
+
+.order_sum_field {
+  .inline-hints {
+    margin: 0;
+  }
 }

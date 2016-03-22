@@ -1,0 +1,9 @@
+= semantic_form_for @product, url: choose_prototype_admin_products_path, method: :post do |f|
+
+  fieldset.inputs
+    legend
+      span Выбор прототипа для товара
+    ol
+      = f.input :prototype, as: :select2
+
+  = f.submit

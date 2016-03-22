@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321035717) do
+ActiveRecord::Schema.define(version: 20160321064747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,9 +116,12 @@ ActiveRecord::Schema.define(version: 20160321035717) do
     t.string   "name"
     t.text     "description"
     t.string   "slug"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "prototype_id"
   end
+
+  add_index "products", ["prototype_id"], name: "index_products_on_prototype_id", using: :btree
 
   create_table "prototypes", force: :cascade do |t|
     t.string   "name"
@@ -190,9 +193,12 @@ ActiveRecord::Schema.define(version: 20160321035717) do
   create_table "variants", force: :cascade do |t|
     t.string   "sku"
     t.string   "width"
+    t.integer  "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "variants", ["product_id"], name: "index_variants_on_product_id", using: :btree
 
   add_foreign_key "nav_items", "pages", column: "url_page_id", on_delete: :cascade
   add_foreign_key "product_property_values", "product_properties"

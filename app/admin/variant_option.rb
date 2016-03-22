@@ -2,6 +2,8 @@ ActiveAdmin.register VariantOption do
 
   permit_params :name, variant_option_values_attributes:[ :id, :value, :_destroy ]
 
+  menu parent: "Товары"
+
   ## INDEX
 
   index download_links: false do

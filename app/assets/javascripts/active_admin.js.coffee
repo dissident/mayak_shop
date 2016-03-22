@@ -50,3 +50,6 @@ $(document).ready ->
 #   # The after hook is a good place to initialize JS plugins and the like.
 #   $(document).on 'has_many_add:after', '.has_many_container', (e, fieldset, container)->
 #     fieldset.find('.chzn-select').chosen { width: "78%" }
+
+
+  $(".property_input").select2()

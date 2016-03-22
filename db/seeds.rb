@@ -29,3 +29,72 @@
 # sig.save
 
 # puts "#{time_point_string}: Seeding is done!"
+
+ProductProperty.create([
+ {
+   name: "Страна производитель",
+   product_property_values_attributes: [
+     {
+       value: "Китай"
+     },
+     {
+       value: "Россия"
+     },
+     {
+       value: "США"
+     }
+   ]
+ },
+ {
+   name: "Бренд",
+   product_property_values_attributes: [
+     {
+       value: "Nike"
+     },
+     {
+       value: "Abibas"
+     },
+     {
+       value: "Краскон"
+     }
+   ]
+ }
+])
+
+VariantOption.create([
+  {
+    name: "Цвет",
+    variant_option_values_attributes: [
+      {
+        value: "Синий"
+      },
+      {
+        value: "Красный"
+      }
+    ]
+  },
+  {
+    name: "Размер",
+    variant_option_values_attributes: [
+      {
+        value: "XL"
+      },
+      {
+        value: "L"
+      }
+    ]
+  }
+])
+
+Prototype.create([
+  {
+    name: "Футболка",
+    product_properties: ProductProperty.all,
+    variant_options: VariantOption.all
+  },
+  {
+    name: "Носки",
+    product_properties: [ProductProperty.first],
+    variant_options: [VariantOption.first]
+  }
+])
