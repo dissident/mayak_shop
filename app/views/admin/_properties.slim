@@ -1,4 +1,4 @@
-- @prototype.product_properties.each do |property|
+- locals[:prototype].product_properties.each do |property|
   li
     = label_tag "product_property_#{property.id}", property.name
     = select_tag "product_property_#{property.id}", options_from_collection_for_select(property.product_property_values, "id", "value"), include_blank: true, class: "property_input"

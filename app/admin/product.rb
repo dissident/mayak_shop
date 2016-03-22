@@ -1,6 +1,6 @@
 ActiveAdmin.register Product do
 
-  permit_params :name, :description, :slug, :prototype_id, variants_ids:[]
+  permit_params :name, :description, :slug, :prototype_id, variants_attributes:[ :id, :sku, :width, :_destroy ]
 
   menu parent: "Товары"
 
@@ -20,11 +20,26 @@ ActiveAdmin.register Product do
     end
   end
 
-  before_filter :set_prototype, only: :new
+  collection_action :option_fields_for_variant, method: :get do
+    if request.xhr?
+      @prototype = Prototype.find(params[:prototype_id].to_i)
+      render "admin/options", layout: false
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
 
   controller do
     def set_prototype
       @prototype = Prototype.find(params[:prototype_id])
+    end
+
+    def new
+      super do |format|
+        if params[:prototype_id].present?
+          @product.prototype_id = params[:prototype_id]
+        end
+      end
     end
   end
 
@@ -54,18 +69,13 @@ ActiveAdmin.register Product do
 
   form html: { multipart: true } do |f|
     f.inputs '' do
-      if f.object.new_record?
-        f.input :prototype_id, hint: "<b>#{ prototype.name }</b>".html_safe, input_html: { class: 'hidden', value: prototype.id },
-                wrapper_html: { class: 'order_sum_field'}
-      else
-        f.input :prototype_id, hint: "<b>#{ f.object.prototype.name }</b>".html_safe, input_html: { class: 'hidden', value: f.object.prototype.id },
-                wrapper_html: { class: 'order_sum_field'}
-      end
+      f.input :prototype_id, hint: "<b>#{ f.object.prototype.name }</b>".html_safe, input_html: { class: 'hidden', value: f.object.prototype.id },
+              wrapper_html: { class: 'order_sum_field'}
       f.input :name
       f.input :description, input_html: { class: 'editor', 'data-type' => f.object.class.name, 'data-id' => f.object.id }
       f.input :slug
-      if prototype.product_properties.any?
-        render "admin/properties", locals: { prototype: prototype }
+      if f.object.prototype.product_properties.any?
+        render "admin/properties", locals: { prototype: f.object.prototype }
       end
     end
 
@@ -73,9 +83,6 @@ ActiveAdmin.register Product do
       f.has_many :variants, { allow_destroy: true } do |variant|
         variant.input :sku
         variant.input :width
-        if prototype.variant_options.any?
-          render "admin/options", locals: { prototype: prototype }
-        end
       end
     end
 

@@ -41,15 +41,16 @@ $(document).ready ->
       false
     checkTypeElementsVisibility()
 
-## Has many adding event helpers (original from https://github.com/activeadmin/activeadmin/blob/master/app/assets/javascripts/active_admin/lib/has_many.js.coffee )
-#   $(document).on 'has_many_add:before', '.has_many_container', (e, container)->
-#     if $(@).children('fieldset').length >= 3
-#       alert "you've reached the maximum number of items"
-#       e.preventDefault()
-#
-#   # The after hook is a good place to initialize JS plugins and the like.
-#   $(document).on 'has_many_add:after', '.has_many_container', (e, fieldset, container)->
-#     fieldset.find('.chzn-select').chosen { width: "78%" }
+  $(document).on 'has_many_add:after', '.has_many_container', (e, fieldset, container)->
+    prototype_id = $("#product_prototype_id_input input").val()
+    $.ajax "/admin/products/option_fields_for_variant?prototype_id=#{prototype_id}",
+      type: 'GET'
+      dataType: 'html'
+      error: (jqXHR, textStatus, errorThrown) ->
+        console.log errorThrown
+      success: (data, textStatus, jqXHR) ->
+        fieldset.find("ol li:last-child").before(data)
+        fieldset.find(".option_input").select2()
 
 
   $(".property_input").select2()
