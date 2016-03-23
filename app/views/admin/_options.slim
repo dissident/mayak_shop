@@ -1,0 +1,4 @@
+- locals[:prototype].variant_options.each do |option|
+  li id="product_variants_attributes_#{locals[:variant].id}_options"
+    = label_tag "option_value_#{option.id}", option.name
+    = select_tag "product[variants_attributes][#{locals[:variant].id}][options[option_value_#{option.id}]]", options_from_collection_for_select(option.variant_option_values, "id", "value", ), include_blank: true, class: "option_input"

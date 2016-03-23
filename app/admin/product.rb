@@ -4,7 +4,7 @@ ActiveAdmin.register Product do
 
   menu parent: "Товары"
 
-  config.clear_action_items!
+  # config.clear_action_items!
 
   action_item only: :index do
     link_to "Создать новый", choose_prototype_admin_products_path
@@ -23,6 +23,7 @@ ActiveAdmin.register Product do
   collection_action :option_fields_for_variant, method: :get do
     if request.xhr?
       @prototype = Prototype.find(params[:prototype_id].to_i)
+      @variant_id = params[:variant_id].to_i
       render "admin/options", layout: false
     else
       raise ActionController::RoutingError.new('Not Found')
@@ -30,16 +31,52 @@ ActiveAdmin.register Product do
   end
 
   controller do
-    def set_prototype
-      @prototype = Prototype.find(params[:prototype_id])
-    end
-
     def new
       super do |format|
         if params[:prototype_id].present?
           @product.prototype_id = params[:prototype_id]
         end
       end
+    end
+
+    def create
+      super do |format|
+        set_properties(@product, params[:properties])
+      end
+    end
+
+    def update
+      super do |format|
+        # set_options(@product, params[:product][:options])
+      end
+    end
+
+    private
+
+    def set_options(product, options)
+      result = []
+      if options.any?
+        options.each do |key, value|
+          option = VariantOptionValue.find(value)
+          result << option
+        end
+      end
+      product.product_property_values = result
+    end
+
+    def set_properties(product, properties)
+      result = []
+      if properties.any?
+        properties.each do |key, value|
+          property = ProductPropertyValue.find(value)
+          result << property
+        end
+      end
+      product.product_property_values = result
+    end
+
+    def get_option_id(option_key)
+      option_key.to_s.split("_").last.to_i
     end
   end
 
@@ -75,7 +112,7 @@ ActiveAdmin.register Product do
       f.input :description, input_html: { class: 'editor', 'data-type' => f.object.class.name, 'data-id' => f.object.id }
       f.input :slug
       if f.object.prototype.product_properties.any?
-        render "admin/properties", locals: { prototype: f.object.prototype }
+        render "admin/properties", locals: { prototype: f.object.prototype, product: product }
       end
     end
 

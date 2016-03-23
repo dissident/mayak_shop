@@ -43,7 +43,8 @@ $(document).ready ->
 
   $(document).on 'has_many_add:after', '.has_many_container', (e, fieldset, container)->
     prototype_id = $("#product_prototype_id_input input").val()
-    $.ajax "/admin/products/option_fields_for_variant?prototype_id=#{prototype_id}",
+    variant_id = fieldset.next().val()
+    $.ajax "/admin/products/option_fields_for_variant?prototype_id=#{prototype_id},variant_id=#{variant_id}",
       type: 'GET'
       dataType: 'html'
       error: (jqXHR, textStatus, errorThrown) ->
@@ -54,3 +55,6 @@ $(document).ready ->
 
 
   $(".property_input").select2()
+
+
+
