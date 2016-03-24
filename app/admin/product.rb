@@ -120,6 +120,7 @@ ActiveAdmin.register Product do
       f.has_many :variants, { allow_destroy: true } do |variant|
         variant.input :sku
         variant.input :width
+
       end
     end
 
