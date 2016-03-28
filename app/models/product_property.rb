@@ -9,5 +9,13 @@ class ProductProperty < ActiveRecord::Base
   validates :name, presence: true
   validates_associated :product_property_values
 
+  before_validation :create_latin_name
+
+  private
+
+  def create_latin_name
+    self.latin_name = Russian::transliterate(name).parameterize.dasherize
+  end
+
 
 end

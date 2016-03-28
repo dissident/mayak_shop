@@ -105,6 +105,7 @@ ActiveAdmin.register Product do
   ## FORM
 
   form html: { multipart: true } do |f|
+
     f.inputs '' do
       f.input :prototype_id, hint: "<b>#{ f.object.prototype.name }</b>".html_safe, input_html: { class: 'hidden', value: f.object.prototype.id },
               wrapper_html: { class: 'order_sum_field'}
@@ -118,9 +119,13 @@ ActiveAdmin.register Product do
 
     f.inputs do
       f.has_many :variants, { allow_destroy: true } do |variant|
+        variant.object.add_fields(f.object.prototype.variant_options)
         variant.input :sku
         variant.input :width
-
+        variant.input :tsvet
+        # f.object.prototype.variant_options.each do |option|
+        #   variant.input option.latin_name.to_sym
+        # end
       end
     end
 
