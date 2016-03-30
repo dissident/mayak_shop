@@ -1,6 +1,14 @@
 ActiveAdmin.register Product do
 
-  permit_params :name, :description, :slug, :prototype_id, variants_attributes:[ :id, :sku, :width, :_destroy ]
+  permit_params do
+    params = [:name, :description, :slug, :prototype_id, :properties]
+    variants_attributes = [ :id, :sku, :width, :_destroy ]
+    VariantOption.all.each do |option|
+      variants_attributes << option.latin_name.to_sym
+    end
+    params.push(variants_attributes: variants_attributes)
+    params
+  end
 
   menu parent: "Товары"
 
@@ -42,13 +50,43 @@ ActiveAdmin.register Product do
     def create
       super do |format|
         set_properties(@product, params[:properties])
+        @product.prototype.variant_options
       end
     end
 
     def update
-      super do |format|
-        # set_options(@product, params[:product][:options])
+      @product = Product.find(params[:id])
+      @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
+      deleted_variants = []
+      will_be_saved_variants = []
+      permitted_params[:product][:variants_attributes].each do |variant|
+        if variant.second[:id].present?
+          varik = Variant.find(variant.second[:id])
+          if variant.second[:_destroy] == 1
+            deleted_variants << varik
+          else
+            varik.add_fields(@product.prototype.variant_options)
+            varik.assign_attributes(variant.second.except(:id, :_destroy))
+            will_be_saved_variants << varik
+          end
+        else
+          varik = Variant.new
+          varik.add_fields(@product.prototype.variant_options)
+          varik.assign_attributes(variant.second)
+          varik.product = @product
+          will_be_saved_variants << varik
+        end
       end
+      if @product.valid? & (will_be_saved_variants.map{ |v| v.valid? }.reduce(:&))
+        @product.save
+        will_be_saved_variants.map{ |v| v.save }
+        redirect_to admin_product_path(@product), notice: 'Product was successfully updated.'
+      else
+        render :edit
+      end
+      # super do |format|
+      #   set_properties(@product, params[:properties])
+      # end
     end
 
     private
@@ -119,13 +157,12 @@ ActiveAdmin.register Product do
 
     f.inputs do
       f.has_many :variants, { allow_destroy: true } do |variant|
-        variant.object.add_fields(f.object.prototype.variant_options)
         variant.input :sku
         variant.input :width
-        variant.input :tsvet
-        # f.object.prototype.variant_options.each do |option|
-        #   variant.input option.latin_name.to_sym
-        # end
+        variant.object.add_fields(f.object.prototype.variant_options)
+        f.object.prototype.variant_options.each do |option|
+          variant.input option.latin_name.to_sym, as: :select2, collection: options_from_collection_for_select(option.variant_option_values, "id", "value", (option.variant_option_values.ids & variant.object.variant_option_values.ids).first), label: option.name
+        end
       end
     end
 
