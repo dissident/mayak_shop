@@ -91,6 +91,16 @@ ru:
         few:    "Прототипов"
         many:   "Прототипов"
         other:  "Прототипы"
+      product:
+        one:    "Товар"
+        few:    "Товаров"
+        many:   "Товаров"
+        other:  "Товары"
+      variant:
+        one:    "Вариант"
+        few:    "Вариантов"
+        many:   "Вариантов"
+        other:  "Варианты"
     attributes:
       admin_user:
         email:                  "Электронная почта"
@@ -155,3 +165,14 @@ ru:
         name: "Название"
         product_properties: "Параметры продукты"
         variant_options: "Опции варианта"
+      product:
+        name: "Название"
+        description: "Описание"
+        created_at: "Создан"
+        updated_at: "Обновлен"
+        prototype: "Прототип"
+      variant:
+        sku: "Артикул"
+        width: "Вес"
+        created_at: "Создан"
+        updated_at: "Обновлен"
