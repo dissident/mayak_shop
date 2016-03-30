@@ -48,21 +48,36 @@ ActiveAdmin.register Product do
     end
 
     def create
-      super do |format|
-        set_properties(@product, params[:properties])
-        @product.prototype.variant_options
+      @product = Product.new
+      @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
+      set_properties(@product, params[:properties])
+      will_be_saved_variants = []
+      permitted_params[:product][:variants_attributes].each do |variant|
+        varik = Variant.new
+        varik.add_fields(@product.prototype.variant_options)
+        varik.assign_attributes(variant.second)
+        varik.product = @product
+        will_be_saved_variants << varik
+      end
+      if @product.valid? & (will_be_saved_variants.map{ |v| v.valid? }.reduce(:&))
+        @product.save
+        will_be_saved_variants.map{ |v| v.save }
+        redirect_to admin_product_path(@product), notice: 'Product was successfully updated.'
+      else
+        render :edit
       end
     end
 
     def update
       @product = Product.find(params[:id])
       @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
+      set_properties(@product, params[:properties])
       deleted_variants = []
       will_be_saved_variants = []
       permitted_params[:product][:variants_attributes].each do |variant|
         if variant.second[:id].present?
           varik = Variant.find(variant.second[:id])
-          if variant.second[:_destroy] == 1
+          if variant.second[:_destroy] == "1"
             deleted_variants << varik
           else
             varik.add_fields(@product.prototype.variant_options)
@@ -80,13 +95,12 @@ ActiveAdmin.register Product do
       if @product.valid? & (will_be_saved_variants.map{ |v| v.valid? }.reduce(:&))
         @product.save
         will_be_saved_variants.map{ |v| v.save }
+        p deleted_variants
+        deleted_variants.map{ |v| v.delete }
         redirect_to admin_product_path(@product), notice: 'Product was successfully updated.'
       else
         render :edit
       end
-      # super do |format|
-      #   set_properties(@product, params[:properties])
-      # end
     end
 
     private
@@ -136,7 +150,16 @@ ActiveAdmin.register Product do
       row :name
       row(:description) { raw product.description }
       row :slug
-      row :variants
+    end
+
+    panel "Варианты" do
+      table_for product.variants do |variant|
+        column :sku
+        column :width
+        product.prototype.variant_options do |option|
+          option.latin_name
+        end
+      end
     end
   end
 
