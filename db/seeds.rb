@@ -10,9 +10,9 @@
 #   Time.now.strftime("%H:%M:%S:%L")
 # end
 
-# def seedfile(fname)
-#   File.open File.join(Rails.root, "public/content/seeds/", fname)
-# end
+def seedfile(fname)
+  File.open File.join(Rails.root, "public/content/seeds/", fname)
+end
 
 # puts "#{time_point_string}: Start seeding"
 
@@ -32,55 +32,50 @@
 
 ProductProperty.create([
  {
-   name: "Страна производитель",
+   name: "Технические особенности",
    product_property_values_attributes: [
      {
-       value: "Китай"
+       value: "Экологичность",
+       description: "Древесина из возобновляемых источников, натуральные составы для обработки и комплектующие с сертифицированных фабрик используются в производстве с минимальным количеством отходов, которые в свою очередь также перерабатываются.",
+       image: seedfile('eco.jpg')
      },
      {
-       value: "Россия"
-     },
-     {
-       value: "США"
+       value: "Поляризация",
+       description: "Древесина из возобновляемых источников, натуральные составы для обработки и комплектующие с сертифицированных фабрик используются в производстве с минимальным количеством отходов, которые в свою очередь также перерабатываются.",
+       image: seedfile('eco.jpg')
      }
    ]
  },
- {
-   name: "Бренд",
-   product_property_values_attributes: [
-     {
-       value: "Nike"
-     },
-     {
-       value: "Abibas"
-     },
-     {
-       value: "Краскон"
-     }
-   ]
- }
 ])
 
 VariantOption.create([
   {
-    name: "Цвет",
+    name: "Оправа",
     variant_option_values_attributes: [
       {
-        value: "Синий"
+        value: "Венге",
+        image: seedfile('1375038.jpg')
       },
       {
-        value: "Красный"
+        value: "Орех",
+        image: seedfile('traditional-hardwood-flooring.jpg')
+      },
+      {
+        value: "Ясень",
+        image: seedfile('_________________510f4de0dbc86.jpg')
       }
     ]
   },
   {
-    name: "Размер",
+    name: "Стекло",
     variant_option_values_attributes: [
       {
-        value: "XL"
+        value: "черный",
+        image: seedfile('images.jpeg')
       },
       {
-        value: "L"
+        value: "коричневый",
+        image: seedfile('02.jpg')
       }
     ]
   }

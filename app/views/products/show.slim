@@ -1,0 +1,16 @@
+h1 = @product.name
+
+p
+  = image_tag @variant.image_fas.url, width: "200px"
+  = image_tag @variant.image_profile.url, width: "200px"
+
+p = @variant.price
+
+p
+  ' filters:
+  - @product.prototype.variant_options.each do |option|
+    p = "#{option.name}:"
+    - option.variant_option_values.each do |value|
+      p = link_to value.value, url_for(params.except("#{option.latin_name}").merge("#{option.latin_name}": value.id))
+
+

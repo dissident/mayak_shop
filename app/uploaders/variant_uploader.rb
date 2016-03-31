@@ -1,0 +1,4 @@
+class VariantUploader < BaseImageUploader
+
+
+end

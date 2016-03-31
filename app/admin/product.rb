@@ -2,7 +2,7 @@ ActiveAdmin.register Product do
 
   permit_params do
     params = [:name, :description, :slug, :prototype_id, :properties]
-    variants_attributes = [ :id, :sku, :width, :_destroy ]
+    variants_attributes = [ :id, :sku, :width, :_destroy, :price, :image_fas, :image_fas_cache, :image_profile, :image_profile_cache ]
     VariantOption.all.each do |option|
       variants_attributes << option.latin_name.to_sym
     end
@@ -182,6 +182,11 @@ ActiveAdmin.register Product do
       f.has_many :variants, { allow_destroy: true } do |variant|
         variant.input :sku
         variant.input :width
+        variant.input :price
+        variant.input :image_fas
+        variant.input :image_fas_cache, as: :hidden
+        variant.input :image_profile
+        variant.input :image_profile_cache, as: :hidden
         variant.object.add_fields(f.object.prototype.variant_options)
         f.object.prototype.variant_options.each do |option|
           variant.input option.latin_name.to_sym, as: :select2, collection: options_from_collection_for_select(option.variant_option_values, "id", "value", (option.variant_option_values.ids & variant.object.variant_option_values.ids).first), label: option.name

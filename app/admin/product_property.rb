@@ -1,6 +1,6 @@
 ActiveAdmin.register ProductProperty do
 
-  permit_params :name, product_property_values_attributes:[ :id, :value, :_destroy]
+  permit_params :name, product_property_values_attributes:[ :id, :value, :_destroy, :image, :image_cache]
 
   menu parent: "Товары"
 
@@ -36,6 +36,8 @@ ActiveAdmin.register ProductProperty do
                                              allow_destroy: true,
                                              new_record: 'Добавить значение' } do |a|
           a.input :value
+          a.input :image
+          a.input :image_cache, as: :hidden
         end
       end
     end

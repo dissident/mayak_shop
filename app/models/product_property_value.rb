@@ -6,4 +6,8 @@ class ProductPropertyValue < ActiveRecord::Base
 
   validates :value, presence: true
 
+  mount_uploader :image, ProductPropertyValueUploader
+
+
+
 end

@@ -1,0 +1,7 @@
+h1 Товары
+
+- @products.each do |product|
+
+  p = image_tag product.variants.first.image_profile.url, width: "200px"
+  p = link_to product.name, product_path(product)
+  p = product.variants.first.price

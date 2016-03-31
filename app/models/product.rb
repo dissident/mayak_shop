@@ -9,6 +9,7 @@ class Product < ActiveRecord::Base
   accepts_nested_attributes_for :variants
 
   validates :name, :slug, presence: true
+  validates_associated :variants
 
 
 end

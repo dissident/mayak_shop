@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321064747) do
+ActiveRecord::Schema.define(version: 20160331042529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 20160321064747) do
     t.integer  "product_property_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.text     "description"
+    t.string   "image"
   end
 
   add_index "product_property_values", ["product_property_id"], name: "index_product_property_values_on_product_property_id", using: :btree
@@ -173,6 +175,7 @@ ActiveRecord::Schema.define(version: 20160321064747) do
     t.integer  "variant_option_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.string   "image"
   end
 
   add_index "variant_option_values", ["variant_option_id"], name: "index_variant_option_values_on_variant_option_id", using: :btree
@@ -196,8 +199,11 @@ ActiveRecord::Schema.define(version: 20160321064747) do
     t.string   "sku"
     t.string   "width"
     t.integer  "product_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "image_fas"
+    t.string   "image_profile"
+    t.integer  "price"
   end
 
   add_index "variants", ["product_id"], name: "index_variants_on_product_id", using: :btree

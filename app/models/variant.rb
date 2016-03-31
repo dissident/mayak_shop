@@ -4,6 +4,9 @@ class Variant < ActiveRecord::Base
 
   belongs_to :product, inverse_of: :variants
 
+  mount_uploader :image_fas, VariantUploader
+  mount_uploader :image_profile, VariantUploader
+
   def add_fields(options)
     options.each do |option|
       self.class.send(:define_method, "#{option.latin_name}") do
