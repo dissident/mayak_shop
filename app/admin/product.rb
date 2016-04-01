@@ -2,6 +2,9 @@ ActiveAdmin.register Product do
 
   permit_params do
     params = [:name, :description, :slug, :prototype_id, :properties]
+    ProductProperty.all.each do |property|
+      params << property.latin_name.to_sym
+    end
     variants_attributes = [ :id, :sku, :width, :_destroy ]
     VariantOption.all.each do |option|
       variants_attributes << option.latin_name.to_sym
@@ -12,10 +15,18 @@ ActiveAdmin.register Product do
 
   menu parent: "Товары"
 
-  # config.clear_action_items!
+  config.clear_action_items!
 
   action_item only: :index do
     link_to "Создать новый", choose_prototype_admin_products_path
+  end
+
+  action_item only: :show do
+    link_to "Редактировать товар", edit_admin_product_path(product)
+  end
+
+  action_item only: :show do
+    link_to "Удалить товар", admin_product_path(product), method: :delete, data: { confirm: "Are you sure?"}
   end
 
   collection_action :choose_prototype, method: [:get, :post] do
@@ -49,8 +60,8 @@ ActiveAdmin.register Product do
 
     def create
       @product = Product.new
+      @product.add_fields(Prototype.find(permitted_params[:product][:prototype_id]).product_properties)
       @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
-      set_properties(@product, params[:properties])
       will_be_saved_variants = []
       permitted_params[:product][:variants_attributes].each do |variant|
         varik = Variant.new
@@ -70,8 +81,8 @@ ActiveAdmin.register Product do
 
     def update
       @product = Product.find(params[:id])
+      @product.add_fields(@product.prototype.product_properties)
       @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
-      set_properties(@product, params[:properties])
       deleted_variants = []
       will_be_saved_variants = []
       permitted_params[:product][:variants_attributes].each do |variant|
@@ -103,33 +114,6 @@ ActiveAdmin.register Product do
       end
     end
 
-    private
-
-    def set_options(product, options)
-      result = []
-      if options.any?
-        options.each do |key, value|
-          option = VariantOptionValue.find(value)
-          result << option
-        end
-      end
-      product.product_property_values = result
-    end
-
-    def set_properties(product, properties)
-      result = []
-      if properties.any?
-        properties.each do |key, value|
-          property = ProductPropertyValue.find(value)
-          result << property
-        end
-      end
-      product.product_property_values = result
-    end
-
-    def get_option_id(option_key)
-      option_key.to_s.split("_").last.to_i
-    end
   end
 
   ## INDEX
@@ -173,8 +157,9 @@ ActiveAdmin.register Product do
       f.input :name
       f.input :description, input_html: { class: 'editor', 'data-type' => f.object.class.name, 'data-id' => f.object.id }
       f.input :slug
-      if f.object.prototype.product_properties.any?
-        render "admin/properties", locals: { prototype: f.object.prototype, product: product }
+      f.object.add_fields(f.object.prototype.product_properties)
+      f.object.prototype.product_properties.each do |property|
+        f.input property.latin_name.to_sym, as: :select2, collection: options_from_collection_for_select(property.product_property_values, "id", "value", (property.product_property_values.ids & f.object.product_property_values.ids).first), label: property.name
       end
     end
 
