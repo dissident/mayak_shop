@@ -101,6 +101,16 @@ ru:
         few:    "Вариантов"
         many:   "Вариантов"
         other:  "Варианты"
+      taxonomy:
+        one:    "Классификация"
+        few:    "Классификаций"
+        many:   "Классификаций"
+        other:  "Классификации"
+      taxon:
+        one:    "Класс"
+        few:    "Классов"
+        many:   "Классов"
+        other:  "Классы"
     attributes:
       admin_user:
         email:                  "Электронная почта"
@@ -176,3 +186,12 @@ ru:
         width: "Вес"
         created_at: "Создан"
         updated_at: "Обновлен"
+      taxonomy:
+        name: "Название"
+        created_at: "Создана"
+        updated_at: "Обновлена"
+      taxon:
+        name: "Название"
+        created_at: "Создан"
+        updated_at: "Обновлен"
+

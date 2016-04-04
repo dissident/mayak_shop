@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321064747) do
+ActiveRecord::Schema.define(version: 20160404034034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 20160321064747) do
     t.integer  "product_property_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.text     "description"
+    t.string   "image"
   end
 
   add_index "product_property_values", ["product_property_id"], name: "index_product_property_values_on_product_property_id", using: :btree
@@ -168,11 +170,27 @@ ActiveRecord::Schema.define(version: 20160321064747) do
 
   add_index "static_files", ["holder_type", "holder_id"], name: "index_static_files_on_holder_type_and_holder_id", using: :btree
 
+  create_table "taxonomies", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "taxons", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "taxonomy_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "taxons", ["taxonomy_id"], name: "index_taxons_on_taxonomy_id", using: :btree
+
   create_table "variant_option_values", force: :cascade do |t|
     t.string   "value"
     t.integer  "variant_option_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.string   "image"
   end
 
   add_index "variant_option_values", ["variant_option_id"], name: "index_variant_option_values_on_variant_option_id", using: :btree
@@ -196,13 +214,17 @@ ActiveRecord::Schema.define(version: 20160321064747) do
     t.string   "sku"
     t.string   "width"
     t.integer  "product_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "image_fas"
+    t.string   "image_profile"
+    t.integer  "price"
   end
 
   add_index "variants", ["product_id"], name: "index_variants_on_product_id", using: :btree
 
   add_foreign_key "nav_items", "pages", column: "url_page_id", on_delete: :cascade
   add_foreign_key "product_property_values", "product_properties"
+  add_foreign_key "taxons", "taxonomies"
   add_foreign_key "variant_option_values", "variant_options"
 end
