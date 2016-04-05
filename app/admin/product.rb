@@ -5,6 +5,9 @@ ActiveAdmin.register Product do
     ProductProperty.all.each do |property|
       params << property.latin_name.to_sym
     end
+    Taxonomy.all.each do |taxonomy|
+      params.push("#{taxonomy.latin_name}": [])
+    end
     variants_attributes = [ :id, :sku, :width, :_destroy ]
     VariantOption.all.each do |option|
       variants_attributes << option.latin_name.to_sym
@@ -61,14 +64,17 @@ ActiveAdmin.register Product do
     def create
       @product = Product.new
       @product.add_fields(Prototype.find(permitted_params[:product][:prototype_id]).product_properties)
+      @product.add_taxons_fields(@product.prototype.taxonomies)
       @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
       will_be_saved_variants = []
-      permitted_params[:product][:variants_attributes].each do |variant|
-        varik = Variant.new
-        varik.add_fields(@product.prototype.variant_options)
-        varik.assign_attributes(variant.second)
-        varik.product = @product
-        will_be_saved_variants << varik
+      if permitted_params[:product][:variants_attributes].present?
+        permitted_params[:product][:variants_attributes].each do |variant|
+          varik = Variant.new
+          varik.add_fields(@product.prototype.variant_options)
+          varik.assign_attributes(variant.second)
+          varik.product = @product
+          will_be_saved_variants << varik
+        end
       end
       if @product.valid? & (will_be_saved_variants.map{ |v| v.valid? }.reduce(:&))
         @product.save
@@ -82,31 +88,33 @@ ActiveAdmin.register Product do
     def update
       @product = Product.find(params[:id])
       @product.add_fields(@product.prototype.product_properties)
+      @product.add_taxons_fields(@product.prototype.taxonomies)
       @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
       deleted_variants = []
       will_be_saved_variants = []
-      permitted_params[:product][:variants_attributes].each do |variant|
-        if variant.second[:id].present?
-          varik = Variant.find(variant.second[:id])
-          if variant.second[:_destroy] == "1"
-            deleted_variants << varik
+      if permitted_params[:product][:variants_attributes].present?
+        permitted_params[:product][:variants_attributes].each do |variant|
+          if variant.second[:id].present?
+            varik = Variant.find(variant.second[:id])
+            if variant.second[:_destroy] == "1"
+              deleted_variants << varik
+            else
+              varik.add_fields(@product.prototype.variant_options)
+              varik.assign_attributes(variant.second.except(:id, :_destroy))
+              will_be_saved_variants << varik
+            end
           else
+            varik = Variant.new
             varik.add_fields(@product.prototype.variant_options)
-            varik.assign_attributes(variant.second.except(:id, :_destroy))
+            varik.assign_attributes(variant.second)
+            varik.product = @product
             will_be_saved_variants << varik
           end
-        else
-          varik = Variant.new
-          varik.add_fields(@product.prototype.variant_options)
-          varik.assign_attributes(variant.second)
-          varik.product = @product
-          will_be_saved_variants << varik
         end
       end
       if @product.valid? & (will_be_saved_variants.map{ |v| v.valid? }.reduce(:&))
         @product.save
         will_be_saved_variants.map{ |v| v.save }
-        p deleted_variants
         deleted_variants.map{ |v| v.delete }
         redirect_to admin_product_path(@product), notice: 'Product was successfully updated.'
       else
@@ -157,6 +165,10 @@ ActiveAdmin.register Product do
       f.input :name
       f.input :description, input_html: { class: 'editor', 'data-type' => f.object.class.name, 'data-id' => f.object.id }
       f.input :slug
+      f.object.add_taxons_fields(f.object.prototype.taxonomies)
+      f.object.prototype.taxonomies.each do |taxonomy|
+        f.input taxonomy.latin_name.to_sym, as: :select2_multiple, collection: options_from_collection_for_select(taxonomy.taxons, "id", "name", (taxonomy.taxons.ids & f.object.taxons.ids)), label: taxonomy.name
+      end
       f.object.add_fields(f.object.prototype.product_properties)
       f.object.prototype.product_properties.each do |property|
         f.input property.latin_name.to_sym, as: :select2, collection: options_from_collection_for_select(property.product_property_values, "id", "value", (property.product_property_values.ids & f.object.product_property_values.ids).first), label: property.name

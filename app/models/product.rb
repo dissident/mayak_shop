@@ -1,5 +1,7 @@
 class Product < ActiveRecord::Base
 
+  has_and_belongs_to_many :taxons
+
   belongs_to :prototype, inverse_of: :products
 
   has_and_belongs_to_many :product_property_values
@@ -31,5 +33,23 @@ class Product < ActiveRecord::Base
     end
   end
 
+  def add_taxons_fields(taxonomies)
+    taxonomies.each do |taxonomy|
+      self.class.send(:define_method, "#{taxonomy.latin_name}") do
+        taxon_ids = taxonomy.taxons.ids & taxons.map{ |t| t.id }
+        taxon_ids.map{ |t| Taxon.find(t) }
+      end
+      self.class.send(:define_method, "#{taxonomy.latin_name}=") do |arguments|
+        if arguments.present?
+          taxonomy.taxons.each do |value|
+            taxons.delete(value)
+          end
+          arguments.each do |argument|
+            taxons << Taxon.find(argument) if argument.present?
+          end
+        end
+      end
+    end
+  end
 
 end

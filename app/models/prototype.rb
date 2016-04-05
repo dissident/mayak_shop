@@ -1,4 +1,5 @@
 class Prototype < ActiveRecord::Base
+  has_and_belongs_to_many :taxonomies
 
   has_many :products, inverse_of: :prototype, dependent: :nullify
 

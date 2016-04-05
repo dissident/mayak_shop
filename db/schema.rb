@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160404034034) do
+ActiveRecord::Schema.define(version: 20160404041855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,8 +101,6 @@ ActiveRecord::Schema.define(version: 20160404034034) do
     t.integer  "product_property_id"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.text     "description"
-    t.string   "image"
   end
 
   add_index "product_property_values", ["product_property_id"], name: "index_product_property_values_on_product_property_id", using: :btree
@@ -126,11 +124,27 @@ ActiveRecord::Schema.define(version: 20160404034034) do
 
   add_index "products", ["prototype_id"], name: "index_products_on_prototype_id", using: :btree
 
+  create_table "products_taxons", id: false, force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "taxon_id"
+  end
+
+  add_index "products_taxons", ["product_id"], name: "index_products_taxons_on_product_id", using: :btree
+  add_index "products_taxons", ["taxon_id"], name: "index_products_taxons_on_taxon_id", using: :btree
+
   create_table "prototypes", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "prototypes_taxonomies", id: false, force: :cascade do |t|
+    t.integer "prototype_id"
+    t.integer "taxonomy_id"
+  end
+
+  add_index "prototypes_taxonomies", ["prototype_id"], name: "index_prototypes_taxonomies_on_prototype_id", using: :btree
+  add_index "prototypes_taxonomies", ["taxonomy_id"], name: "index_prototypes_taxonomies_on_taxonomy_id", using: :btree
 
   create_table "prototypes_variant_options", id: false, force: :cascade do |t|
     t.integer "prototype_id"
@@ -172,12 +186,14 @@ ActiveRecord::Schema.define(version: 20160404034034) do
 
   create_table "taxonomies", force: :cascade do |t|
     t.string   "name"
+    t.string   "latin_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "taxons", force: :cascade do |t|
     t.string   "name"
+    t.string   "latin_name"
     t.integer  "taxonomy_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -190,7 +206,6 @@ ActiveRecord::Schema.define(version: 20160404034034) do
     t.integer  "variant_option_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.string   "image"
   end
 
   add_index "variant_option_values", ["variant_option_id"], name: "index_variant_option_values_on_variant_option_id", using: :btree
@@ -214,11 +229,8 @@ ActiveRecord::Schema.define(version: 20160404034034) do
     t.string   "sku"
     t.string   "width"
     t.integer  "product_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "image_fas"
-    t.string   "image_profile"
-    t.integer  "price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "variants", ["product_id"], name: "index_variants_on_product_id", using: :btree

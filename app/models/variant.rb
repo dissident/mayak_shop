@@ -25,4 +25,5 @@ class Variant < ActiveRecord::Base
     end
   end
 
+
 end

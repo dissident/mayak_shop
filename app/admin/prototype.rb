@@ -1,6 +1,6 @@
 ActiveAdmin.register Prototype do
 
-  permit_params :name, product_property_ids:[], variant_option_ids:[]
+  permit_params :name, product_property_ids:[], variant_option_ids:[], taxonomy_ids: []
 
   menu parent: "Товары"
 
@@ -21,6 +21,7 @@ ActiveAdmin.register Prototype do
       row :name
       row(:product_properties){ prototype.product_properties.map{ |p| p.name }.join(", ") }
       row(:variant_options){ prototype.variant_options.map{ |v| v.name }.join(", ") }
+      row(:taxonomies){ prototype.taxonomies.map{ |v| v.name }.join(", ") }
     end
 
   end
@@ -32,9 +33,8 @@ ActiveAdmin.register Prototype do
       f.input :name
       f.input :product_properties, as: :select2_multiple
       f.input :variant_options, as: :select2_multiple
+      f.input :taxonomies, as: :select2_multiple
     end
-
-    
 
     f.actions
   end
