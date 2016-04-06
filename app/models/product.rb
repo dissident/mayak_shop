@@ -60,7 +60,12 @@ class Product < ActiveRecord::Base
               taxons << Taxon.find(argument) if argument.present?
             end
           else
-
+            unless (arguments.to_i == 0)
+              taxonomy.taxons.each do |value|
+                taxons.delete(value)
+              end
+              taxons << Taxon.find(arguments.to_i)
+            end
           end
         end
       end
