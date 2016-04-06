@@ -2,6 +2,8 @@ ActiveAdmin.register Taxonomy do
 
   permit_params :name, :multiple, taxons_attributes:[ :id, :name, :_destroy ]
 
+  menu parent: "Товары"
+
   ## INDEX
 
   index download_links: false do
