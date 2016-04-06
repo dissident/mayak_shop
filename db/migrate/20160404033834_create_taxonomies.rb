@@ -3,6 +3,7 @@ class CreateTaxonomies < ActiveRecord::Migration
     create_table :taxonomies do |t|
       t.string :name
       t.string :latin_name
+      t.boolean :multiple, default: false
 
       t.timestamps null: false
     end

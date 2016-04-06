@@ -5,9 +5,15 @@ ActiveAdmin.register Product do
     ProductProperty.all.each do |property|
       params << property.latin_name.to_sym
     end
+    multiple_taxonomies = []
     Taxonomy.all.each do |taxonomy|
-      params.push("#{taxonomy.latin_name}": [])
+      if taxonomy.multiple?
+        multiple_taxonomies.push("#{taxonomy.latin_name}": [])
+      else
+        params << taxonomy.latin_name.to_sym
+      end
     end
+    params.push(*multiple_taxonomies)
     variants_attributes = [ :id, :sku, :width, :_destroy ]
     VariantOption.all.each do |option|
       variants_attributes << option.latin_name.to_sym
@@ -63,8 +69,9 @@ ActiveAdmin.register Product do
 
     def create
       @product = Product.new
-      @product.add_fields(Prototype.find(permitted_params[:product][:prototype_id]).product_properties)
-      @product.add_taxons_fields(@product.prototype.taxonomies)
+      prototype = Prototype.find(permitted_params[:product][:prototype_id])
+      @product.add_fields(prototype.product_properties)
+      @product.add_taxons_fields(prototype.taxonomies)
       @product.assign_attributes(permitted_params[:product].except(:variants_attributes))
       will_be_saved_variants = []
       if permitted_params[:product][:variants_attributes].present?
@@ -167,7 +174,11 @@ ActiveAdmin.register Product do
       f.input :slug
       f.object.add_taxons_fields(f.object.prototype.taxonomies)
       f.object.prototype.taxonomies.each do |taxonomy|
-        f.input taxonomy.latin_name.to_sym, as: :select2_multiple, collection: options_from_collection_for_select(taxonomy.taxons, "id", "name", (taxonomy.taxons.ids & f.object.taxons.ids)), label: taxonomy.name
+        if taxonomy.multiple?
+          f.input taxonomy.latin_name.to_sym, as: :select2_multiple, collection: options_from_collection_for_select(taxonomy.taxons, "id", "name", (taxonomy.taxons.ids & f.object.taxons.ids)), label: taxonomy.name
+        else
+          f.input taxonomy.latin_name.to_sym, as: :select2, collection: options_from_collection_for_select(taxonomy.taxons, "id", "name", (taxonomy.taxons.ids & f.object.taxons.ids).first), label: taxonomy.name
+        end
       end
       f.object.add_fields(f.object.prototype.product_properties)
       f.object.prototype.product_properties.each do |property|

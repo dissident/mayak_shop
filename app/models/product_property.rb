@@ -17,5 +17,4 @@ class ProductProperty < ActiveRecord::Base
     self.latin_name = Russian::transliterate(name).parameterize.dasherize
   end
 
-
 end

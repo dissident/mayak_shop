@@ -12,6 +12,8 @@ class Product < ActiveRecord::Base
 
   validates :name, :slug, presence: true
 
+  # TODO: rename function like add_properties_fileds
+  # TODO: rewrite like taxons function for use multiple and single mode
   def add_fields(properties)
     properties.each do |property|
       self.class.send(:define_method, "#{property.latin_name}") do
@@ -36,16 +38,29 @@ class Product < ActiveRecord::Base
   def add_taxons_fields(taxonomies)
     taxonomies.each do |taxonomy|
       self.class.send(:define_method, "#{taxonomy.latin_name}") do
-        taxon_ids = taxonomy.taxons.ids & taxons.map{ |t| t.id }
-        taxon_ids.map{ |t| Taxon.find(t) }
+        if taxonomy.multiple?
+          taxon_ids = taxonomy.taxons.ids & taxons.map{ |t| t.id }
+          taxon_ids.map{ |t| Taxon.find(t) }
+        else
+          taxon_id = (taxonomy.taxons.ids & taxons.map{ |t| t.id }).first
+          value = nil
+          if taxon_id.present?
+            value = Taxon.find(taxon_id)
+          end
+          value
+        end
       end
       self.class.send(:define_method, "#{taxonomy.latin_name}=") do |arguments|
         if arguments.present?
-          taxonomy.taxons.each do |value|
-            taxons.delete(value)
-          end
-          arguments.each do |argument|
-            taxons << Taxon.find(argument) if argument.present?
+          if taxonomy.multiple?
+            taxonomy.taxons.each do |value|
+              taxons.delete(value)
+            end
+            arguments.each do |argument|
+              taxons << Taxon.find(argument) if argument.present?
+            end
+          else
+
           end
         end
       end

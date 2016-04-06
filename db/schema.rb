@@ -187,8 +187,9 @@ ActiveRecord::Schema.define(version: 20160404041855) do
   create_table "taxonomies", force: :cascade do |t|
     t.string   "name"
     t.string   "latin_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "multiple",   default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "taxons", force: :cascade do |t|
