@@ -4,6 +4,7 @@ ru:
   defaults:
     page_titles:
       news: "Новости"
+      products: "Товары"
       feedback: "Обратная связь"
     empty_collections:
       news: "Нет новостей"
@@ -194,4 +195,3 @@ ru:
         name: "Название"
         created_at: "Создан"
         updated_at: "Обновлен"
-
