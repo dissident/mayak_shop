@@ -1,0 +1,12 @@
+section.holder
+  article.content
+    h1 = @seo_carrier.title
+
+    - if @products.any?
+      ul
+        - @products.each do |product|
+          li
+            .h3 = product.name
+            = button_to 'Add to Cart', line_items_path(product_id: product)
+    - else
+      p = t 'defaults.empty_collections.products'
