@@ -18,6 +18,15 @@ Rails.application.routes.draw do
   # news
   resources :news, only: [:index, :show]
 
+  # products
+  resources :products, only: [:index, :show]
+
+  # line items
+  resources :line_items
+
+  # carts
+  resources :carts, only: [:show]
+
   # pages
   get '*page_path' => 'pages#show', as: :page
 
