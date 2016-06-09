@@ -1,5 +1,7 @@
 class Product < ActiveRecord::Base
 
+  has_many :line_items
+
   has_and_belongs_to_many :taxons
 
   belongs_to :prototype, inverse_of: :products
@@ -11,6 +13,8 @@ class Product < ActiveRecord::Base
   accepts_nested_attributes_for :variants
 
   validates :name, :slug, presence: true
+
+  before_destroy :ensure_not_referenced_by_any_line_item
 
   # TODO: rename function like add_properties_fileds
   # TODO: rewrite like taxons function for use multiple and single mode
@@ -72,4 +76,14 @@ class Product < ActiveRecord::Base
     end
   end
 
+  private
+
+  def ensure_not_referenced_by_any_line_item
+    if line_items.empty?
+      return true
+    else
+      errors.add(:base, 'существуют товарные позиции')
+      return false
+    end
+  end
 end
