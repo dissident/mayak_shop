@@ -13,9 +13,6 @@ class CartsController < FrontendController
     @cart = Cart.new
   end
 
-  def edit
-  end
-
   def create
     @cart = Cart.new(cart_params)
 
