@@ -6,6 +6,7 @@ ru:
       news: "Новости"
       products: "Товары"
       feedback: "Обратная связь"
+      cart:     "Корзина"
     empty_collections:
       news: "Нет новостей"
       products: "Нет товаров"
