@@ -4,14 +4,21 @@
 h2 = t "defaults.page_titles.cart"
 table
   tr
-    td Название:
-    td Вес:
-    td Цена:
+    td Quantity:
+    td Quantity controll:
+    td Product name:
+    td Width:
+    td Price:
   - @cart.line_items.each do |item|
     tr
+      td = item.quantity
+      td
+        = link_to "+1", plus_quantity_path(item)
+        = link_to "-1", minus_quantity_path(item) if item.quantity > 1
+
       td = item.variant.product.name
       td = item.variant.width
       td = item.variant.price
-      td = link_to "Удалить", item, method: :delete, data: { confirm: "Вы уверены?" }
+      td = link_to "Remove from cart", item, method: :delete, data: { confirm: "Are you sure?" }
 
 = @cart.full_price
