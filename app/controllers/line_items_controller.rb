@@ -5,7 +5,7 @@ class LineItemsController < FrontendController
 
   def create
     variant = Variant.find(params[:variant_id])
-    @line_item = @cart.line_items.build(variant: variant)
+    @line_item = @cart.add_product(variant.id)
 
     respond_to do |format|
       if @line_item.save
@@ -19,8 +19,33 @@ class LineItemsController < FrontendController
   end
 
   def destroy
-    LineItem.find(params[:id]).destroy
-    flash[:success] = "Product successfully deleted"
+    @line_item = LineItem.find(params[:id])
+    if @line_item.quantity > 1
+      @line_item.quantity = @line_item.quantity - 1
+      @line_item.save
+      redirect_to :back
+    else
+      @line_item.destroy
+      flash[:success] = "Product successfully deleted"
+      redirect_to :back
+    end
+  end
+
+  def plus_quantity
+    @line_item = LineItem.find(params[:id])
+    @line_item.quantity = @line_item.quantity + 1
+    @line_item.save
+    redirect_to :back
+  end
+
+  def minus_quantity
+    @line_item = LineItem.find(params[:id])
+    if @line_item.quantity == 1
+      @line_item.quantity
+    else
+      @line_item.quantity = @line_item.quantity - 1
+    end
+    @line_item.save
     redirect_to :back
   end
 
