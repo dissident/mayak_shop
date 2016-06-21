@@ -7,6 +7,9 @@ class CartsController < FrontendController
   end
 
   def show
+    if session[:cart_id] != @cart.id
+      redirect_to products_path
+    end
   end
 
   def new
@@ -15,6 +18,7 @@ class CartsController < FrontendController
 
   def create
     @cart = Cart.new(cart_params)
+
 
     respond_to do |format|
       if @cart.save
