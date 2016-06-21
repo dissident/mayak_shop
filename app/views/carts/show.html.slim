@@ -2,6 +2,16 @@
   p.notice = notice
 
 h2 = t "defaults.page_titles.cart"
-ul
+table
+  tr
+    td Название:
+    td Вес:
+    td Цена:
   - @cart.line_items.each do |item|
-    li = item.product.name
+    tr
+      td = item.variant.product.name
+      td = item.variant.width
+      td = item.variant.price
+      td = link_to "Удалить", item, method: :delete, data: { confirm: "Вы уверены?" }
+
+= @cart.full_price
