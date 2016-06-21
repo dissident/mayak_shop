@@ -111,14 +111,40 @@ Product.create!([
       {
         sku: "663690",
         width: "500",
+        price: 150
       },
       {
         sku: "663691",
-        width: "510"
+        width: "510",
+        price: 160
       },
       {
         sku: "663692",
-        width: "520"
+        width: "520",
+        price: 170
+      }
+    ]
+  },
+  {
+    name: "Test product 2",
+    slug: "test 2",
+    description: "Description of test product 2",
+    prototype_id: prototypes[0].id,
+    variants_attributes: [
+      {
+        sku: "663690",
+        width: "500",
+        price: 150
+      },
+      {
+        sku: "663691",
+        width: "510",
+        price: 160
+      },
+      {
+        sku: "663692",
+        width: "520",
+        price: 170
       }
     ]
   }
