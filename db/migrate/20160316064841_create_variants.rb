@@ -3,6 +3,7 @@ class CreateVariants < ActiveRecord::Migration
     create_table :variants do |t|
       t.string :sku
       t.string :width
+      t.float  :price
       t.belongs_to :product, index: true
 
       t.timestamps null: false
