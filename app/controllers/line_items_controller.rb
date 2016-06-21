@@ -20,7 +20,7 @@ class LineItemsController < FrontendController
 
   def destroy
     LineItem.find(params[:id]).destroy
-    flash[:success] = "Товар удален"
+    flash[:success] = "Product successfully deleted"
     redirect_to :back
   end
 
