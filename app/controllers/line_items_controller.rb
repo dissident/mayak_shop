@@ -2,11 +2,10 @@ class LineItemsController < FrontendController
 
   include CurrentCart
   before_action :set_cart, only: [:create]
-  before_action :set_line_item, only: [:show, :edit, :update, :destroy]
 
   def create
-    product = Product.find(params[:product_id])
-    @line_item = @cart.line_items.build(product: product)
+    variant = Variant.find(params[:variant_id])
+    @line_item = @cart.line_items.build(variant: variant)
 
     respond_to do |format|
       if @line_item.save
@@ -19,10 +18,16 @@ class LineItemsController < FrontendController
     end
   end
 
+  def destroy
+    LineItem.find(params[:id]).destroy
+    flash[:success] = "Товар удален"
+    redirect_to :back
+  end
+
   private
 
   def line_item_params
-    params.require(:line_item).permit(:product_id, :cart_belongs_to)
+    params.require(:line_item).permit(:variant_id, :cart_belongs_to)
   end
 
 end
