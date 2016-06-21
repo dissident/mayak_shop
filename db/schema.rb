@@ -35,8 +35,6 @@ ActiveRecord::Schema.define(version: 20160607062734) do
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "carts", force: :cascade do |t|
-    t.string   "ident"
-    t.string   "string"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -44,8 +42,9 @@ ActiveRecord::Schema.define(version: 20160607062734) do
   create_table "line_items", force: :cascade do |t|
     t.integer  "variant_id"
     t.integer  "cart_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "quantity",   default: 1
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   add_index "line_items", ["cart_id"], name: "index_line_items_on_cart_id", using: :btree

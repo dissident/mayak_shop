@@ -4,6 +4,8 @@ class CreateLineItems < ActiveRecord::Migration
       t.references :variant, index: true, foreign_key: true
       t.belongs_to :cart, index: true, foreign_key: true
 
+      t.integer :quantity, default: 1
+
       t.timestamps null: false
     end
   end
