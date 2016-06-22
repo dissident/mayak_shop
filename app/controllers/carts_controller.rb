@@ -2,9 +2,6 @@ class CartsController < FrontendController
   before_action :set_cart, only: [:show, :edit, :update, :destroy]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
 
-  def index
-    @carts = Cart.all
-  end
 
   def show
     if session[:cart_id] != @cart.id
