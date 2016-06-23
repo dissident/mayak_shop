@@ -27,4 +27,10 @@ class Cart < ActiveRecord::Base
     price
   end
 
+  def empty_cart?
+    if self.line_items.count == 0
+      self.destroy
+    end
+  end
+
 end

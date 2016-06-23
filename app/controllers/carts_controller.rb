@@ -1,10 +1,15 @@
 class CartsController < FrontendController
   before_action :set_cart, only: [:show, :edit, :update, :destroy]
-  rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
+  # rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
 
   def show
-    if session[:cart_id] != @cart.id
-      redirect_to products_path
+    if @cart.present?
+      if session[:cart_id] != @cart.id
+        @entry_status = false
+      else
+        @entry_status = true
+      end
+      return @entry_status
     end
   end
 
@@ -32,7 +37,7 @@ class CartsController < FrontendController
   private
 
   def set_cart
-    @cart = Cart.find(params[:id])
+    @cart = Cart.where(id: session[:cart_id]).take
   end
 
   def cart_params

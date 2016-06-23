@@ -24,11 +24,13 @@ Rails.application.routes.draw do
   # line items
   resources :line_items
 
+  # get '/line_items/:vaid/create' => 'line_items#create', as: :add_to_cart
   get '/line_items/:id/plus_quantity' => 'line_items#plus_quantity', as: :plus_quantity
   get '/line_items/:id/minus_quantity' => 'line_items#minus_quantity', as: :minus_quantity
 
   # carts
-  resources :carts, only: [:show]
+  # resources :carts, only: [:show]
+  get '/cart' => 'carts#show', as: :cart
 
   # pages
   get '*page_path' => 'pages#show', as: :page
