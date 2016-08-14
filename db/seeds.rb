@@ -86,7 +86,8 @@ VariantOption.create([
   }
 ])
 
-Prototype.create([
+puts "Seed Prototypes"
+prototypes = Prototype.create([
   {
     name: "Футболка",
     product_properties: ProductProperty.all,
@@ -96,5 +97,55 @@ Prototype.create([
     name: "Носки",
     product_properties: [ProductProperty.first],
     variant_options: [VariantOption.first]
+  }
+])
+
+puts "Seed Products"
+Product.create!([
+  {
+    name: "Test product",
+    slug: "test1",
+    description: "Description of test product",
+    prototype_id: prototypes[0].id,
+    variants_attributes: [
+      {
+        sku: "663690",
+        width: "500",
+        price: 150
+      },
+      {
+        sku: "663691",
+        width: "510",
+        price: 160
+      },
+      {
+        sku: "663692",
+        width: "520",
+        price: 170
+      }
+    ]
+  },
+  {
+    name: "Test product 2",
+    slug: "test 2",
+    description: "Description of test product 2",
+    prototype_id: prototypes[0].id,
+    variants_attributes: [
+      {
+        sku: "663690",
+        width: "500",
+        price: 150
+      },
+      {
+        sku: "663691",
+        width: "510",
+        price: 160
+      },
+      {
+        sku: "663692",
+        width: "520",
+        price: 170
+      }
+    ]
   }
 ])

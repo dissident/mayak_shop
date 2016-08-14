@@ -4,9 +4,13 @@ ru:
   defaults:
     page_titles:
       news: "Новости"
+      products: "Товары"
       feedback: "Обратная связь"
+      cart:     "Корзина"
     empty_collections:
       news: "Нет новостей"
+      products: "Нет товаров"
+      cart: "В корзину пока не добавлены товары"
   seo:
     seo_parameters: "SEO параметры"
     empty_seo_title_info: "в теге title будет использован Заголовок"
@@ -194,4 +198,3 @@ ru:
         name: "Название"
         created_at: "Создан"
         updated_at: "Обновлен"
-
